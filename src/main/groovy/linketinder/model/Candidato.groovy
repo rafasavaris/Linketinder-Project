@@ -5,7 +5,7 @@ class Candidato extends Pessoa {
     int idade
 
     @Override
-    void exibirDados() {
+    exibirDados() {
         println "Nome: ${nome}"
         println "E-mail: ${email}"
         println "CPF: ${cpf}"
