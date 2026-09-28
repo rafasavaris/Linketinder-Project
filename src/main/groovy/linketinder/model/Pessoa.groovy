@@ -1,0 +1,2 @@
+package linketinder.model
+
