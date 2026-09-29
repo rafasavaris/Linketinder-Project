@@ -4,11 +4,11 @@ import linketinder.data.CandidatoData
 import linketinder.data.EmpresaData
 import linketinder.model.Candidato
 import linketinder.model.Empresa
-
-import java.util.InputMismatchException
+import linketinder.service.CadastroService
 
 def candidatos = CandidatoData.candidatos
 def empresas = EmpresaData.empresas
+def cadastroService = new CadastroService()
 
 def scanner = new Scanner(System.in)
 def opcao
@@ -18,8 +18,8 @@ do {
     println "* 1 - Listar candidatos     *"
     println "* 2 - Listar empresas       *"
     println "* 3 - Cadastro de candidato *"
-    println "* 4 - Cadastro de empresa"
-    println "* 0 - Sair"
+    println "* 4 - Cadastro de empresa   *"
+    println "* 0 - Sair                  *"
     print "* Escolha uma opção: "
 
     opcao = scanner.nextInt()
@@ -41,10 +41,10 @@ do {
             }
             break
         case 3:
-            cadastrarCandidato(scanner, candidatos)
+            cadastrarCandidato(scanner, candidatos, cadastroService)
             break
         case 4:
-            cadastrarEmpresa(scanner, empresas)
+            cadastrarEmpresa(scanner, empresas, cadastroService)
             break
         case 0:
             println "\nEncerrando o Linketinder..."
@@ -58,13 +58,13 @@ scanner.close()
 
 def lerTexto(scanner, mensagem) {
     String valor
+
     do {
         print mensagem
         valor = scanner.nextLine().trim()
 
         if (valor.isEmpty()) println "Esse campo não pode ficar vazio."
     } while (valor.isEmpty())
-
     return valor
 }
 
@@ -96,12 +96,14 @@ def lerDadosPessoa(scanner) {
     dados.descricao = lerTexto(scanner, "Descrição: ")
 
     def competencias
+
     do {
         print "Competências (separe por vírgula): "
         competencias = scanner.nextLine()
                 .split(",")
                 .collect { it.trim() }
                 .findAll { !it.isEmpty() }
+
         if (competencias.isEmpty()) {
             println "Informe pelo menos uma competência."
         }
@@ -112,7 +114,7 @@ def lerDadosPessoa(scanner) {
 }
 
 // cadastro de candidato
-def cadastrarCandidato(scanner, candidatos) {
+def cadastrarCandidato(scanner, candidatos, cadastroService) {
     println "\n===== CADASTRO DE CANDIDATO ====="
 
     def dados = lerDadosPessoa(scanner)
@@ -129,12 +131,12 @@ def cadastrarCandidato(scanner, candidatos) {
             descricao: dados.descricao,
             competencias: dados.competencias
     )
-    candidatos.add(candidato)
+    cadastroService.cadastroCandidato(candidatos, candidato)
     println "\nCandidato cadastrado com sucesso!"
 }
 
 // cadastro de empresa
-def cadastrarEmpresa(scanner, empresas) {
+def cadastrarEmpresa(scanner, empresas, cadastroService) {
     println "\n===== CADASTRO DE EMPRESA ====="
 
     def dados = lerDadosPessoa(scanner)
@@ -151,6 +153,6 @@ def cadastrarEmpresa(scanner, empresas) {
             descricao: dados.descricao,
             competencias: dados.competencias
     )
-    empresas.add(empresa)
+    cadastroService.cadastroEmpresa(empresas, empresa)
     println "\nEmpresa cadastrada com sucesso!"
 }
