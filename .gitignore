@@ -42,3 +42,15 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Node / TypeScript
+**/node_modules/
+**/dist/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente
+.env
+.env.*
