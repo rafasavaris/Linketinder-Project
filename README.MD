@@ -1,12 +1,21 @@
 # Linketinder
 
-O **Linketinder** é um MVP de uma aplicação inspirada no LinkedIn e no Tinder, desenvolvida em **Groovy**. O sistema tem como objetivo aproximar candidatos e empresas a partir de suas informações e competências.
+O **Linketinder** é um MVP de uma aplicação inspirada no LinkedIn e no Tinder, desenvolvido com **Groovy** no backend e **TypeScript** no frontend. O sistema tem como objetivo aproximar candidatos e empresas a partir de suas informações, competências e oportunidades disponíveis.
 
-A aplicação possui candidatos e empresas pré-cadastrados e permite também realizar novos cadastros durante a execução. O projeto utiliza orientação a objetos, separação em pacotes e testes automatizados com **Spock Framework**.
+O projeto é dividido em duas partes:
+
+- **Backend:** desenvolvido em Groovy, utilizando Gradle e Spock Framework;
+- **Frontend:** desenvolvido em TypeScript, HTML e CSS, com Bootstrap para a interface.
+
+O backend possui funcionalidades de cadastro, listagem e validação de candidatos e empresas, além de testes automatizados. O frontend disponibiliza uma interface web para cadastro e visualização de candidatos, empresas e vagas.
+
+Atualmente, o frontend possui funcionamento independente do backend, utilizando `localStorage` do navegador para armazenar os dados durante a utilização da aplicação.
 
 ---
 
 ## Funcionalidades
+
+### Backend
 
 - Listar candidatos cadastrados;
 - Listar empresas cadastradas;
@@ -20,9 +29,33 @@ A aplicação possui candidatos e empresas pré-cadastrados e permite também re
 - Testes automatizados para criação e preenchimento dos objetos;
 - Utilização de TDD no desenvolvimento das funcionalidades de cadastro.
 
+### Frontend
+
+- Página inicial de navegação;
+- Cadastro de candidatos;
+- Cadastro de empresas;
+- Cadastro de vagas;
+- Listagem de candidatos;
+- Listagem de empresas;
+- Listagem de vagas;
+- Visualização do perfil do candidato;
+- Visualização do perfil da empresa;
+- Exclusão de candidatos e empresas cadastrados;
+- Exibição anônima de candidatos e empresas nas listas;
+- Exibição das competências e formação dos candidatos;
+- Exibição das competências das empresas;
+- Gráfico de competências dos candidatos no perfil da empresa;
+- Armazenamento dos dados utilizando `localStorage`;
+- Interface responsiva utilizando Bootstrap;
+- Organização do frontend utilizando TypeScript e orientação a objetos.
+
 ---
 
-## Principais classes
+## Backend
+
+O backend é responsável pelas classes e regras principais do sistema, utilizando **Groovy** e conceitos de orientação a objetos.
+
+### Principais classes
 
 - **PessoaInterface**: define o comportamento comum das pessoas do sistema;
 - **Pessoa**: classe abstrata que reúne os atributos compartilhados entre candidatos e empresas;
@@ -71,7 +104,7 @@ Uma empresa possui:
 
 ## Cadastro de novos usuários
 
-O sistema permite realizar dois tipos de cadastro.
+O backend permite realizar dois tipos de cadastro.
 
 ### Cadastro de candidato
 
@@ -105,9 +138,82 @@ As competências também devem ser informadas separadas por vírgulas. Após o p
 
 ---
 
+## Frontend
+
+O frontend do Linketinder foi desenvolvido utilizando **TypeScript**, **HTML**, **CSS** e **Bootstrap**.
+
+A aplicação possui uma página inicial que permite navegar entre as funcionalidades disponíveis para candidatos e empresas.
+
+### Candidato
+
+O candidato pode:
+
+- Cadastrar seu perfil;
+- Informar dados pessoais;
+- Informar sua formação;
+- Informar suas competências;
+- Visualizar as vagas disponíveis;
+- Visualizar seu perfil.
+
+As vagas são apresentadas sem a identificação da empresa, mantendo a visualização das oportunidades de forma anônima.
+
+### Empresa
+
+A empresa pode:
+
+- Cadastrar seu perfil;
+- Informar suas competências desejadas;
+- Cadastrar vagas;
+- Visualizar candidatos cadastrados;
+- Visualizar seu perfil.
+
+A lista de candidatos apresenta as informações de forma anônima, exibindo principalmente competências, formação e descrição.
+
+### Vagas
+
+As vagas possuem:
+
+- Título;
+- Descrição;
+- Competências necessárias;
+- Empresa responsável.
+
+Na listagem de vagas, a identificação da empresa não é exibida ao candidato.
+
+---
+
+## Armazenamento no frontend
+
+Atualmente, o frontend utiliza o `localStorage` do navegador para armazenar os dados cadastrados.
+
+São utilizados diferentes registros para candidatos, empresas e vagas.
+
+Por exemplo, os candidatos são armazenados utilizando a chave `candidatos`.
+
+Os dados permanecem disponíveis enquanto estiverem armazenados no navegador, mas não existe ainda uma comunicação entre o frontend e o backend.
+
+---
+
+## Interface
+
+A interface foi desenvolvida utilizando **Bootstrap 5** juntamente com um arquivo CSS próprio.
+
+O frontend possui:
+
+- Layout responsivo;
+- Cards para apresentação dos dados;
+- Formulários de cadastro;
+- Botões personalizados;
+- Identidade visual baseada nas cores do projeto;
+- Organização das páginas por tipo de usuário;
+- Exibição de informações adicionais ao passar o mouse sobre alguns elementos;
+- Gráfico de competências no perfil da empresa.
+
+---
+
 ## Validações
 
-O sistema possui algumas validações para evitar cadastros incompletos ou inválidos.
+O backend possui algumas validações para evitar cadastros incompletos ou inválidos.
 
 Entre elas estão:
 
@@ -117,11 +223,13 @@ Entre elas estão:
 - É necessário informar pelo menos uma competência;
 - Entradas inválidas para a idade são tratadas sem interromper a execução do programa.
 
+No frontend, os formulários também possuem campos obrigatórios para auxiliar no preenchimento dos dados.
+
 ---
 
 ## Testes
 
-O projeto utiliza o **Spock Framework** para a implementação dos testes automatizados.
+O projeto utiliza o **Spock Framework** para a implementação dos testes automatizados do backend.
 
 Os testes verificam principalmente:
 
@@ -154,11 +262,23 @@ No cadastro, os testes verificam se um novo candidato ou empresa é corretamente
 
 ## Tecnologias utilizadas
 
-- Groovy
-- Gradle
-- Spock Framework
-- JUnit Platform
-- IntelliJ IDEA
+### Backend
+
+- Groovy;
+- Gradle;
+- Spock Framework;
+- JUnit Platform;
+- IntelliJ IDEA.
+
+### Frontend
+
+- TypeScript;
+- HTML5;
+- CSS3;
+- Bootstrap 5;
+- Node.js;
+- npm;
+- TypeScript Compiler.
 
 ---
 
@@ -167,37 +287,30 @@ No cadastro, os testes verificam se um novo candidato ou empresa é corretamente
 Para executar o projeto, é necessário ter instalado:
 
 - Java;
-- Gradle ou utilizar o Gradle Wrapper incluído no projeto.
+- Node.js;
+- npm.
 
-Recomenda-se utilizar uma versão do Java compatível com a configuração do projeto.
+O backend pode ser executado utilizando o Gradle Wrapper incluído no projeto, não sendo necessário instalar o Gradle separadamente.
 
 ---
 
-## Como executar
+## Como executar o backend
 
 Clone o repositório:
 
-```bash
-git clone https://github.com/rafasavaris/Linketinder-Project
-```
+`git clone https://github.com/rafasavaris/Linketinder-Project`
 
 Entre na pasta do projeto:
 
-```bash
-cd Linketinder-Project
-```
+`cd Linketinder-Project`
 
 Execute a aplicação utilizando o Gradle Wrapper:
 
-```bash
-./gradlew run
-```
+`./gradlew run`
 
 No Windows:
 
-```bash
-gradlew.bat run
-```
+`gradlew.bat run`
 
 ---
 
@@ -205,22 +318,57 @@ gradlew.bat run
 
 Os testes automatizados podem ser executados utilizando o Gradle Wrapper:
 
-```bash
-./gradlew test
-```
+`./gradlew test`
 
 No Windows:
 
-```bash
-gradlew.bat test
-```
+`gradlew.bat test`
+
 Após a execução, o Gradle informa se os testes foram executados com sucesso.
+
+---
+
+## Como executar o frontend
+
+Entre na pasta do frontend:
+
+`cd frontend`
+
+Instale as dependências:
+
+`npm install`
+
+Compile os arquivos TypeScript:
+
+`npx tsc`
+
+Após a compilação, os arquivos JavaScript serão gerados na pasta `dist`.
+
+Para visualizar as páginas, pode ser utilizado um servidor local, como a extensão **Live Server** do Visual Studio Code.
+
+Abra o arquivo `frontend/pages/index.html` utilizando o servidor local.
+
+---
+
+## Compilação do TypeScript
+
+O frontend utiliza o TypeScript Compiler para transformar os arquivos `.ts` em arquivos `.js`.
+
+A configuração principal está no arquivo `tsconfig.json`.
+
+A compilação é realizada com:
+
+`npx tsc`
+
+Os arquivos compilados são gerados na pasta `dist`, mantendo a organização dos diretórios presentes em `src`.
+
+Por exemplo, `src/scripts/candidato/listaCandidatos.ts` é compilado para `dist/scripts/candidato/listaCandidatos.js`.
 
 ---
 
 ## Menu do sistema
 
-Ao executar o programa, será apresentado um menu com as seguintes funcionalidades:
+Ao executar o backend, será apresentado um menu com as seguintes funcionalidades:
 
 - **Listar candidatos**: exibe todos os candidatos pré-cadastrados e os candidatos adicionados durante a execução;
 - **Listar empresas**: exibe todas as empresas pré-cadastradas e as empresas adicionadas durante a execução;
@@ -228,19 +376,94 @@ Ao executar o programa, será apresentado um menu com as seguintes funcionalidad
 - **Cadastro de empresa**: permite cadastrar uma nova empresa informando seus dados e competências desejadas;
 - **Sair**: encerra a execução do sistema.
 
+No frontend, as funcionalidades são acessadas por meio da página inicial e das páginas de candidatos, empresas e vagas.
+
 ---
 
 ## Funcionamento do cadastro
 
-Os dados informados pelo usuário são utilizados para criar um novo objeto de `Candidato` ou `Empresa`. Depois disso, o objeto é enviado para o `CadastroService`, que realiza a inserção na lista correspondente.
+No backend, os dados informados pelo usuário são utilizados para criar um novo objeto de `Candidato` ou `Empresa`. Depois disso, o objeto é enviado para o `CadastroService`, que realiza a inserção na lista correspondente.
 
-Dessa forma, os cadastros realizados durante a execução passam a aparecer nas opções de listagem.
+No frontend, os dados preenchidos nos formulários são transformados em objetos e armazenados no `localStorage` do navegador.
+
+Dessa forma, os cadastros realizados no frontend podem ser utilizados pelas páginas de listagem e perfil durante a utilização da aplicação.
+
+---
+
+## Estrutura do projeto
+
+Linketinder-Project/
+├── backend/
+│   ├── gradle/
+│   ├── src/
+│   ├── bin/
+│   └── build/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── models/
+│   │   │   ├── Pessoa.ts
+│   │   │   ├── Candidato.ts
+│   │   │   ├── Empresa.ts
+│   │   │   └── Vaga.ts
+│   │   │
+│   │   └── scripts/
+│   │       ├── candidato/
+│   │       │   ├── cadastroCandidato.ts
+│   │       │   ├── listaCandidatos.ts
+│   │       │   └── perfilCandidato.ts
+│   │       │
+│   │       ├── empresa/
+│   │       │   ├── cadastroEmpresa.ts
+│   │       │   ├── listaEmpresas.ts
+│   │       │   └── perfilEmpresa.ts
+│   │       │
+│   │       └── vaga/
+│   │           ├── cadastroVaga.ts
+│   │           └── listaVagas.ts
+│   │
+│   ├── pages/
+│   │   ├── candidato/
+│   │   │   ├── cadastroCandidato.html
+│   │   │   ├── listaCandidatos.html
+│   │   │   └── perfilCandidato.html
+│   │   │
+│   │   ├── empresa/
+│   │   │   ├── cadastroEmpresa.html
+│   │   │   ├── listaEmpresas.html
+│   │   │   └── perfilEmpresa.html
+│   │   │
+│   │   ├── vaga/
+│   │   │   ├── cadastroVaga.html
+│   │   │   └── listaVagas.html
+│   │   │
+│   │   └── index.html
+│   │
+│   ├── dist/
+│   ├── node_modules/
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── style.css
+│   └── tsconfig.json
+│
+├── .gitignore
+├── build.gradle
+├── gradlew
+├── gradlew.bat
+├── README.md
+└── settings.gradle
 
 ---
 
 ## Observações
 
-Os dados cadastrados durante a execução são armazenados apenas em memória. Dessa forma, os novos cadastros não são mantidos após o encerramento do programa. Os candidatos e empresas pré-cadastrados são definidos nas classes `CandidatoData` e `EmpresaData`.
+Os dados cadastrados no backend durante a execução são armazenados apenas em memória. Dessa forma, os novos cadastros não são mantidos após o encerramento do programa.
+
+Os candidatos e empresas pré-cadastrados são definidos nas classes `CandidatoData` e `EmpresaData`.
+
+No frontend, os dados são armazenados no `localStorage` do navegador.
+
+O frontend e o backend ainda não possuem comunicação direta entre si. A integração entre as duas partes poderá ser implementada posteriormente.
 
 ---
 
@@ -261,3 +484,5 @@ Os dados cadastrados durante a execução são armazenados apenas em memória. D
     </td>
   </tr>
 </table>
+
+---
