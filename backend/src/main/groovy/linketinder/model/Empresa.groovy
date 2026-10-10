@@ -12,6 +12,5 @@ class Empresa extends Pessoa {
         println "CEP: ${cep}"
         println "País: ${pais}"
         println "Descrição: ${descricao}"
-        println "Competências: ${competencias}"
     }
 }

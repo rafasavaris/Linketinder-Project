@@ -1,0 +1,33 @@
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy:5.0.3'
+
+    testImplementation platform('org.spockframework:spock-bom:2.4-groovy-5.0')
+    testImplementation 'org.spockframework:spock-core'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'org.postgresql:postgresql:42.7.7'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClass = 'linketinder.Main'
+}
+
+tasks.named('run', JavaExec) {
+    standardInput = System.in
+}

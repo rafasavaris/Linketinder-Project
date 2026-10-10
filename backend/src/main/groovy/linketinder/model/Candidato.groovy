@@ -4,6 +4,7 @@ import java.time.LocalDate
 class Candidato extends Pessoa {
     String cpf
     LocalDate dataNascimento
+    List<Competencia> competencias = []
 
     @Override
     exibirDados() {

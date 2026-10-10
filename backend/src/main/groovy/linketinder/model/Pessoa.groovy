@@ -11,5 +11,4 @@ abstract class Pessoa implements PessoaInterface {
     String senha
     String pais
     String email
-    List<String> competencias
 }
