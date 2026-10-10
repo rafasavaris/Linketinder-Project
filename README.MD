@@ -390,6 +390,76 @@ Dessa forma, os cadastros realizados no frontend podem ser utilizados pelas pág
 
 ---
 
+## Modelo Conceitual e Lógico do Banco de Dados
+
+O banco de dados do **Linketinder** tem como objetivo gerenciar usuários, candidatos, empresas, formações, competências e vagas de emprego, além de registrar as manifestações de interesse entre candidatos e empresas.
+
+O projeto utiliza uma estrutura que permite organizar as informações dos usuários, relacionar suas habilidades às oportunidades disponíveis e registrar as interações realizadas na plataforma.
+
+Ambos os modelos foram desenvolvidos utilizando o **brModelo**.
+
+### Diagramas
+
+- [Modelo Conceitual](docs/modeloConceitual.png)
+- [Modelo Lógico](docs/modeloLogico.png)
+
+### 1. Modelo Conceitual
+
+O modelo conceitual apresenta as principais entidades do sistema, seus atributos e os relacionamentos entre elas, sem se aprofundar nos detalhes de implementação do banco de dados.
+
+#### Entidades
+
+- **Usuario:** representa os usuários cadastrados na plataforma, armazenando informações como nome, e-mail, senha, descrição e endereço;
+- **Candidato:** especialização de `Usuario` que representa os usuários interessados em oportunidades de emprego. Possui atributos específicos, como CPF e data de nascimento;
+- **Empresa:** especialização de `Usuario` que representa as empresas cadastradas na plataforma, com CNPJ como atributo específico;
+- **Formacao:** armazena as formações acadêmicas e profissionais dos usuários;
+- **Competencia:** representa as competências e habilidades que podem ser associadas aos candidatos e às vagas;
+- **Vaga:** representa as oportunidades de emprego cadastradas pelas empresas, contendo informações como título, descrição, CEP, cidade, estado e país.
+
+#### Relacionamentos principais
+
+- **CandidatoCompetencia:** associa candidatos às competências que possuem;
+- **VagaCompetencia:** associa vagas às competências exigidas ou desejadas;
+- **CurtidaCandidatoVaga:** registra o interesse de um candidato por uma vaga;
+- **CurtidaEmpresaCandidato:** registra o interesse de uma empresa por um candidato.
+
+O modelo também apresenta uma generalização e especialização entre `Usuario`, `Candidato` e `Empresa`. Dessa forma, os atributos comuns ficam centralizados na entidade `Usuario`, enquanto os atributos específicos são definidos nas entidades especializadas.
+
+### 2. Modelo Lógico
+
+O modelo lógico transforma as entidades e os relacionamentos do modelo conceitual em tabelas, definindo suas chaves primárias (PKs), chaves estrangeiras (FKs), atributos e tipos de dados.
+
+O banco de dados é composto pelas seguintes tabelas:
+
+| Tabela | Descrição |
+|---|---|
+| `Usuario` | Armazena os dados comuns dos usuários cadastrados. |
+| `Candidato` | Armazena os dados específicos dos candidatos, utilizando o identificador do usuário como PK e FK. |
+| `Empresa` | Armazena os dados específicos das empresas, utilizando o identificador do usuário como PK e FK. |
+| `Formacao` | Armazena as formações vinculadas aos usuários. |
+| `Competencia` | Armazena as competências disponíveis para associação a candidatos e vagas. |
+| `Vaga` | Armazena as vagas cadastradas pelas empresas. |
+| `CandidatoCompetencia` | Tabela associativa entre candidatos e competências. |
+| `VagaCompetencia` | Tabela associativa entre vagas e competências. |
+| `CurtidaCandidatoVaga` | Registra os interesses dos candidatos por vagas. |
+| `CurtidaEmpresaCandidato` | Registra os interesses das empresas por candidatos. |
+
+#### Chaves primárias e estrangeiras
+
+As chaves primárias identificam unicamente os registros de cada tabela, enquanto as chaves estrangeiras estabelecem os relacionamentos entre elas.
+
+- **Usuario:** possui `idUsuario` como chave primária.
+- **Candidato:** utiliza `idUsuario` como chave primária e estrangeira, referenciando `Usuario`.
+- **Empresa:** utiliza `idUsuario` como chave primária e estrangeira, referenciando `Usuario`.
+- **Formacao:** possui `idFormacao` como chave primária e `idUsuario` como chave estrangeira.
+- **Competencia:** possui `idCompetencia` como chave primária.
+- **Vaga:** possui `idVaga` como chave primária e `idEmpresa` como chave estrangeira.
+- **CandidatoCompetencia:** possui `idCandidatoCompetencia` como chave primária, além das chaves estrangeiras `idCandidato` e `idCompetencia`.
+- **VagaCompetencia:** possui `idVagaCompetencia` como chave primária, além das chaves estrangeiras `idCompetencia` e `idVaga`.
+- **CurtidaCandidatoVaga:** possui `idCurtidaCandidatoVaga` como chave primária, além das chaves estrangeiras `idVaga` e `idCandidato`.
+- **CurtidaEmpresaCandidato:** possui `idCurtidaEmpresaCandidato` como chave primária, além das chaves estrangeiras `idEmpresa` e `idCandidato`.
+---
+
 ## Estrutura do projeto
 
 Linketinder-Project/
@@ -446,6 +516,10 @@ Linketinder-Project/
 │   ├── style.css
 │   └── tsconfig.json
 │
+├── docs/
+│   ├── modelo-conceitual.png
+│   └── modelo-logico.png
+|
 ├── .gitignore
 ├── build.gradle
 ├── gradlew
