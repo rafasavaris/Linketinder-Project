@@ -1,15 +1,19 @@
 # Linketinder
 
+# Linketinder
+
 O **Linketinder** é um MVP de uma aplicação inspirada no LinkedIn e no Tinder, desenvolvido com **Groovy** no backend e **TypeScript** no frontend. O sistema tem como objetivo aproximar candidatos e empresas a partir de suas informações, competências e oportunidades disponíveis.
 
 O projeto é dividido em duas partes:
 
-- **Backend:** desenvolvido em Groovy, utilizando Gradle e Spock Framework;
+- **Backend:** desenvolvido em Groovy, utilizando Gradle, PostgreSQL e JDBC para persistência de dados;
 - **Frontend:** desenvolvido em TypeScript, HTML e CSS, com Bootstrap para a interface.
 
-O backend possui funcionalidades de cadastro, listagem e validação de candidatos e empresas, além de testes automatizados. O frontend disponibiliza uma interface web para cadastro e visualização de candidatos, empresas e vagas.
+O backend possui funcionalidades de cadastro, consulta, atualização e exclusão de candidatos, empresas, competências e vagas, utilizando um banco de dados relacional PostgreSQL. Também possui testes automatizados e validações para os dados informados.
 
-Atualmente, o frontend possui funcionamento independente do backend, utilizando `localStorage` do navegador para armazenar os dados durante a utilização da aplicação.
+O frontend disponibiliza uma interface web para cadastro e visualização de candidatos, empresas e vagas.
+
+Atualmente, o frontend funciona de maneira independente do backend, utilizando `localStorage` do navegador para armazenar os dados durante a utilização da aplicação. A integração entre o frontend e o backend ainda não foi implementada.
 
 ---
 
@@ -17,17 +21,13 @@ Atualmente, o frontend possui funcionamento independente do backend, utilizando 
 
 ### Backend
 
-- Listar candidatos cadastrados;
-- Listar empresas cadastradas;
-- Cadastrar novos candidatos;
-- Cadastrar novas empresas;
-- Inserir novos candidatos na lista de candidatos;
-- Inserir novas empresas na lista de empresas;
-- Validação de campos obrigatórios;
-- Validação da idade do candidato;
-- Testes automatizados para os cadastros;
-- Testes automatizados para criação e preenchimento dos objetos;
-- Utilização de TDD no desenvolvimento das funcionalidades de cadastro.
+- CRUD para Candidato, Empresa, Vaga e Competencia;
+- Associação entre candidatos e competências;
+- Associação entre vagas e competências;
+- Persistência dos dados em banco PostgreSQL;
+- Acesso ao banco de dados por meio de JDBC;
+- Validação dos dados informados;
+- Testes automatizados com Spock Framework.
 
 ### Frontend
 
@@ -53,88 +53,131 @@ Atualmente, o frontend possui funcionamento independente do backend, utilizando 
 
 ## Backend
 
-O backend é responsável pelas classes e regras principais do sistema, utilizando **Groovy** e conceitos de orientação a objetos.
+O backend é responsável pelas regras de negócio, pelo gerenciamento dos dados e pela interação com o banco de dados. Foi desenvolvido utilizando **Groovy**, **Gradle** e **JDBC**, com persistência em um banco de dados **PostgreSQL**.
+
+A aplicação utiliza classes específicas para representar as entidades do sistema e classes de acesso a dados para executar operações SQL.
 
 ### Principais classes
 
-- **PessoaInterface**: define o comportamento comum das pessoas do sistema;
-- **Pessoa**: classe abstrata que reúne os atributos compartilhados entre candidatos e empresas;
-- **Candidato**: representa um candidato e possui informações específicas como CPF e idade;
-- **Empresa**: representa uma empresa e possui informações específicas como CNPJ e país;
-- **CandidatoData**: contém os candidatos pré-cadastrados;
-- **EmpresaData**: contém as empresas pré-cadastradas;
-- **CadastroService**: contém as operações responsáveis pela inserção de novos candidatos e empresas nas respectivas listas;
-- **Main**: responsável pela execução do sistema e interação com o usuário por meio do menu.
+- **PessoaInterface:** define o comportamento comum das pessoas do sistema;
+- **Pessoa:** classe abstrata que reúne os atributos compartilhados entre candidatos e empresas;
+- **Candidato:** representa um candidato e possui informações específicas, como CPF e data de nascimento;
+- **Empresa:** representa uma empresa e possui informações específicas, como CNPJ;
+- **Competencia:** representa as competências disponíveis no sistema;
+- **Vaga:** representa uma oportunidade de emprego e suas competências exigidas;
+- **CandidatoData:** realiza operações de persistência e consulta relacionadas aos candidatos;
+- **EmpresaData:** realiza operações de persistência e consulta relacionadas às empresas;
+- **CompetenciaData:** realiza operações de persistência e consulta relacionadas às competências;
+- **VagaData:** realiza operações de persistência e consulta relacionadas às vagas;
+- **ConexaoBD:** gerencia a conexão com o banco de dados PostgreSQL;
+- **Main:** responsável pela execução do sistema e pela interação com o usuário por meio de menus.
+
+As classes de acesso a dados implementam operações CRUD (*Create, Read, Update, Delete*), permitindo cadastrar, consultar, atualizar e excluir registros.
+
+### Persistência de dados
+
+Os dados do backend são armazenados no PostgreSQL, permitindo que os registros permaneçam no banco após o encerramento da aplicação.
+
+O acesso é realizado utilizando JDBC, com comandos SQL executados pelas classes de acesso a dados. O projeto não utiliza ORM para realizar o mapeamento entre os objetos Groovy e as tabelas do banco.
 
 ---
 
 ## Organização dos dados
 
-Os candidatos e empresas são representados por objetos das classes `Candidato` e `Empresa`.
+O sistema utiliza classes para representar as entidades e tabelas relacionais para armazenar suas informações.
 
-A classe `Pessoa` reúne os atributos comuns entre os dois tipos de cadastro, enquanto `Candidato` e `Empresa` possuem os atributos específicos de cada um.
+A classe `Pessoa` reúne os atributos comuns entre candidatos e empresas, enquanto `Candidato` e `Empresa` possuem atributos específicos.
 
 ### Candidato
 
 Um candidato possui:
 
+- Identificador do usuário;
 - Nome;
 - E-mail;
 - CPF;
-- Idade;
+- Data de nascimento;
 - Estado;
 - CEP;
+- Cidade;
+- País;
 - Descrição pessoal;
+- Senha;
 - Competências.
+
+As competências são associadas ao candidato por meio de uma tabela de relacionamento no banco de dados.
 
 ### Empresa
 
 Uma empresa possui:
 
+- Identificador do usuário;
 - Nome;
-- E-mail corporativo;
+- E-mail;
 - CNPJ;
-- País;
 - Estado;
 - CEP;
+- Cidade;
+- País;
 - Descrição;
-- Competências desejadas.
+- Senha.
+
+### Competência
+
+Uma competência possui:
+
+- Identificador;
+- Título.
+
+As competências podem ser associadas a candidatos e vagas.
+
+### Vaga
+
+Uma vaga possui:
+
+- Identificador;
+- Identificador da empresa responsável;
+- Título;
+- Descrição;
+- CEP;
+- Cidade;
+- Estado;
+- País;
+- Competências exigidas.
+
+Cada vaga está vinculada a uma empresa e pode possuir várias competências associadas.
 
 ---
 
-## Cadastro de novos usuários
+## Gerenciamento de dados
 
-O backend permite realizar dois tipos de cadastro.
+O backend permite gerenciar candidatos, empresas, competências e vagas por meio de operações CRUD.
 
-### Cadastro de candidato
+### Candidatos
 
-Durante o cadastro, são solicitadas as seguintes informações:
+É possível cadastrar, listar, consultar, atualizar e excluir candidatos.
 
-- Nome;
-- E-mail;
-- CPF;
-- Idade;
-- Estado;
-- CEP;
-- Descrição;
-- Competências.
+Durante o cadastro, são armazenadas as informações pessoais do candidato e suas competências. As competências são relacionadas por meio da tabela `candidatocompetencia`.
 
-As competências devem ser informadas separadas por vírgulas. Após o preenchimento dos dados, um novo objeto `Candidato` é criado e inserido na lista de candidatos por meio da classe `CadastroService`.
+### Empresas
 
-### Cadastro de empresa
+É possível cadastrar, listar, consultar, atualizar e excluir empresas.
 
-Durante o cadastro, são solicitadas as seguintes informações:
+Cada empresa possui seus dados específicos e pode cadastrar vagas associadas ao seu identificador.
 
-- Nome;
-- E-mail corporativo;
-- CNPJ;
-- País;
-- Estado;
-- CEP;
-- Descrição;
-- Competências desejadas.
+### Competências
 
-As competências também devem ser informadas separadas por vírgulas. Após o preenchimento dos dados, um novo objeto `Empresa` é criado e inserido na lista de empresas por meio da classe `CadastroService`.
+É possível cadastrar, listar, consultar, atualizar e excluir competências.
+
+As competências cadastradas podem ser associadas a candidatos e vagas. O sistema utiliza as tabelas `candidatocompetencia` e `vagacompetencia` para representar esses relacionamentos.
+
+### Vagas
+
+É possível cadastrar, listar, consultar, atualizar e excluir vagas.
+
+Cada vaga está vinculada a uma empresa e pode exigir várias competências. As associações são armazenadas na tabela `vagacompetencia`.
+
+As operações de persistência são realizadas pelas respectivas classes de acesso a dados, que executam comandos SQL por meio de JDBC.
 
 ---
 
@@ -266,6 +309,8 @@ No cadastro, os testes verificam se um novo candidato ou empresa é corretamente
 
 - Groovy;
 - Gradle;
+- PostgreSQL;
+- JDBC;
 - Spock Framework;
 - JUnit Platform;
 - IntelliJ IDEA.
@@ -280,17 +325,26 @@ No cadastro, os testes verificam se um novo candidato ou empresa é corretamente
 - npm;
 - TypeScript Compiler.
 
+### Banco de dados
+
+- PostgreSQL;
+- DBeaver;
+- brModelo.
+
 ---
 
 ## Pré-requisitos
 
 Para executar o projeto, é necessário ter instalado:
 
-- Java;
+- Java compatível com a versão do projeto;
+- PostgreSQL;
 - Node.js;
 - npm.
 
-O backend pode ser executado utilizando o Gradle Wrapper incluído no projeto, não sendo necessário instalar o Gradle separadamente.
+O backend utiliza o Gradle Wrapper incluído no projeto, não sendo necessário instalar o Gradle separadamente.
+
+Para gerenciar o banco de dados, pode ser utilizado o DBeaver ou outra ferramenta compatível com PostgreSQL.
 
 ---
 
@@ -300,17 +354,44 @@ Clone o repositório:
 
 `git clone https://github.com/rafasavaris/Linketinder-Project`
 
-Entre na pasta do projeto:
+Entre na pasta do backend:
 
-`cd Linketinder-Project`
+`cd Linketinder-Project/backend`
 
-Execute a aplicação utilizando o Gradle Wrapper:
+### 1. Configure o banco de dados
+
+Certifique-se de que o PostgreSQL esteja instalado e em execução.
+
+Utilize os scripts SQL disponíveis na pasta `database` para criar e popular as tabelas.
+
+- `createDB.sql`: cria as tabelas e seus relacionamentos;
+- `seed.sql`: insere dados iniciais para testes.
+
+Execute primeiro o script `createDB.sql` e, em seguida, o `seed.sql`.
+
+### 2. Configure a conexão
+
+Verifique as configurações utilizadas pela classe `ConexaoBD`, incluindo:
+
+- Endereço do servidor;
+- Porta do PostgreSQL;
+- Nome do banco de dados;
+- Usuário;
+- Senha.
+
+Certifique-se de que os dados de conexão correspondam ao ambiente em que o PostgreSQL está sendo executado.
+
+### 3. Execute a aplicação
+
+No Linux:
 
 `./gradlew run`
 
 No Windows:
 
 `gradlew.bat run`
+
+A aplicação será iniciada no terminal e apresentará os menus disponíveis para interação com o usuário.
 
 ---
 
@@ -368,15 +449,17 @@ Por exemplo, `src/scripts/candidato/listaCandidatos.ts` é compilado para `dist/
 
 ## Menu do sistema
 
-Ao executar o backend, será apresentado um menu com as seguintes funcionalidades:
+Ao executar o backend, a aplicação apresenta menus para gerenciar os dados armazenados no banco PostgreSQL.
 
-- **Listar candidatos**: exibe todos os candidatos pré-cadastrados e os candidatos adicionados durante a execução;
-- **Listar empresas**: exibe todas as empresas pré-cadastradas e as empresas adicionadas durante a execução;
-- **Cadastro de candidato**: permite cadastrar um novo candidato informando seus dados pessoais e competências;
-- **Cadastro de empresa**: permite cadastrar uma nova empresa informando seus dados e competências desejadas;
-- **Sair**: encerra a execução do sistema.
+As funcionalidades incluem:
 
-No frontend, as funcionalidades são acessadas por meio da página inicial e das páginas de candidatos, empresas e vagas.
+- **Candidatos:** cadastro, listagem, consulta, atualização e exclusão;
+- **Empresas:** cadastro, listagem, consulta, atualização e exclusão;
+- **Competências:** cadastro, listagem, consulta, atualização e exclusão;
+- **Vagas:** cadastro, listagem, consulta, atualização e exclusão;
+- **Sair:** encerra a execução do sistema.
+
+As operações são realizadas por meio das classes de acesso a dados, responsáveis pela comunicação com o banco PostgreSQL. No frontend, as funcionalidades são acessadas por meio da página inicial e das páginas de candidatos, empresas e vagas.
 
 ---
 
@@ -433,16 +516,36 @@ O banco de dados é composto pelas seguintes tabelas:
 
 | Tabela | Descrição |
 |---|---|
-| `Usuario` | Armazena os dados comuns dos usuários cadastrados. |
-| `Candidato` | Armazena os dados específicos dos candidatos, utilizando o identificador do usuário como PK e FK. |
-| `Empresa` | Armazena os dados específicos das empresas, utilizando o identificador do usuário como PK e FK. |
-| `Formacao` | Armazena as formações vinculadas aos usuários. |
-| `Competencia` | Armazena as competências disponíveis para associação a candidatos e vagas. |
-| `Vaga` | Armazena as vagas cadastradas pelas empresas. |
-| `CandidatoCompetencia` | Tabela associativa entre candidatos e competências. |
-| `VagaCompetencia` | Tabela associativa entre vagas e competências. |
-| `CurtidaCandidatoVaga` | Registra os interesses dos candidatos por vagas. |
-| `CurtidaEmpresaCandidato` | Registra os interesses das empresas por candidatos. |
+| `usuario` | Armazena os dados comuns dos usuários cadastrados. |
+| `candidato` | Armazena os dados específicos dos candidatos, utilizando `idusuario` como PK e FK. |
+| `empresa` | Armazena os dados específicos das empresas, utilizando `idusuario` como PK e FK. |
+| `formacao` | Armazena as formações acadêmicas e profissionais vinculadas aos usuários. |
+| `competencia` | Armazena as competências disponíveis para associação a candidatos e vagas. |
+| `vaga` | Armazena as vagas cadastradas pelas empresas. |
+| `candidatocompetencia` | Relaciona candidatos às competências que possuem. |
+| `vagacompetencia` | Relaciona vagas às competências exigidas. |
+| `curtidacandidatovaga` | Registra o interesse dos candidatos por vagas. |
+| `curtidaempresacandidato` | Registra o interesse das empresas por candidatos. |
+
+### Chaves primárias e estrangeiras
+
+- **`usuario`:** possui `idusuario` como chave primária.
+- **`candidato`:** utiliza `idusuario` como chave primária e estrangeira, referenciando `usuario`.
+- **`empresa`:** utiliza `idusuario` como chave primária e estrangeira, referenciando `usuario`.
+- **`formacao`:** possui `idformacao` como chave primária e `idusuario` como chave estrangeira.
+- **`competencia`:** possui `idcompetencia` como chave primária.
+- **`vaga`:** possui `idvaga` como chave primária e `idempresa` como chave estrangeira.
+- **`candidatocompetencia`:** possui `idcandidatocompetencia` como chave primária, além das chaves estrangeiras `idcandidato` e `idcompetencia`.
+- **`vagacompetencia`:** possui `idvagacompetencia` como chave primária, além das chaves estrangeiras `idcompetencia` e `idvaga`.
+- **`curtidacandidatovaga`:** possui `idcurtidacandidatovaga` como chave primária, além das chaves estrangeiras `idvaga` e `idcandidato`.
+- **`curtidaempresacandidato`:** possui `idcurtidaempresacandidato` como chave primária, além das chaves estrangeiras `idempresa` e `idcandidato`.
+
+### 3. Scripts SQL
+
+O projeto possui dois arquivos SQL responsáveis pela criação e pelo preenchimento do banco de dados:
+
+- **`createDB.sql`:** cria a estrutura do banco de dados, incluindo tabelas, colunas, chaves primárias, chaves estrangeiras e relacionamentos;
+- **`seed.sql`:** insere dados iniciais para testes, incluindo usuários, candidatos, empresas, competências, vagas, associações entre competências e registros de interesse.
 
 #### Chaves primárias e estrangeiras
 
@@ -543,13 +646,12 @@ Linketinder-Project/
 
 ## Observações
 
-Os dados cadastrados no backend durante a execução são armazenados apenas em memória. Dessa forma, os novos cadastros não são mantidos após o encerramento do programa.
 
-Os candidatos e empresas pré-cadastrados são definidos nas classes `CandidatoData` e `EmpresaData`.
+O backend utiliza PostgreSQL para persistir os dados de candidatos, empresas, competências e vagas. Dessa forma, os registros permanecem disponíveis após o encerramento da aplicação.
 
-No frontend, os dados são armazenados no `localStorage` do navegador.
+O frontend utiliza `localStorage` do navegador para armazenar os dados cadastrados durante a utilização da interface.
 
-O frontend e o backend ainda não possuem comunicação direta entre si. A integração entre as duas partes poderá ser implementada posteriormente.
+Atualmente, o frontend e o backend funcionam de maneira independente, sem comunicação direta entre si. A integração entre as duas partes poderá ser implementada posteriormente.
 
 ---
 
