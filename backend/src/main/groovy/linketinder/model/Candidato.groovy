@@ -1,15 +1,16 @@
 package linketinder.model
+import java.time.LocalDate
 
 class Candidato extends Pessoa {
     String cpf
-    int idade
+    LocalDate dataNascimento
 
     @Override
     exibirDados() {
         println "Nome: ${nome}"
         println "E-mail: ${email}"
         println "CPF: ${cpf}"
-        println "Idade: ${idade}"
+        println "Data nascimento: ${dataNascimento}"
         println "Estado: ${estado}"
         println "CEP: ${cep}"
         println "Descrição: ${descricao}"
