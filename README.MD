@@ -458,6 +458,14 @@ As chaves primárias identificam unicamente os registros de cada tabela, enquant
 - **VagaCompetencia:** possui `idVagaCompetencia` como chave primária, além das chaves estrangeiras `idCompetencia` e `idVaga`.
 - **CurtidaCandidatoVaga:** possui `idCurtidaCandidatoVaga` como chave primária, além das chaves estrangeiras `idVaga` e `idCandidato`.
 - **CurtidaEmpresaCandidato:** possui `idCurtidaEmpresaCandidato` como chave primária, além das chaves estrangeiras `idEmpresa` e `idCandidato`.
+
+### 3. Scripts SQL
+
+O projeto possui dois arquivos SQL responsáveis pela configuração e pelo preenchimento do banco de dados:
+
+- **`createDB.sql`:** cria a estrutura do banco de dados, incluindo as tabelas, suas colunas, chaves primárias e chaves estrangeiras, além dos relacionamentos entre as entidades;
+- **`seed.sql`:** insere dados iniciais no banco de dados, permitindo testar as funcionalidades da aplicação com usuários, candidatos, empresas, competências, vagas e registros de interesse.
+
 ---
 
 ## Estrutura do projeto
@@ -517,8 +525,12 @@ Linketinder-Project/
 │   └── tsconfig.json
 │
 ├── docs/
-│   ├── modelo-conceitual.png
-│   └── modelo-logico.png
+│   ├── modeloConceitual.png
+│   └── modeloLogico.png
+|
+├── database/
+│   ├── createDB.sql
+│   └── seed.sql
 |
 ├── .gitignore
 ├── build.gradle
